@@ -1,0 +1,202 @@
+﻿:root {
+    --font-100: 'LatoLatinWebHairline', sans-serif;
+    --font-200: 'LatoLatinWebThin', sans-serif;
+    --font-300: 'LatoLatinWebLight', sans-serif;
+    --font-400: 'LatoLatinWebRegular', sans-serif;
+    --font-500: 'LatoLatinWebMedium', sans-serif;
+    --font-600: 'LatoLatinWebSemibold', sans-serif;
+    --font-700: 'LatoLatinWebBold', sans-serif;
+    --font-800: 'LatoLatinWebHeavy', sans-serif;
+    --font-900: 'LatoLatinWebBlack', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #fff;
+    font-family: var(--font-500);
+}
+
+header {
+    padding: 65px 80px 40px 80px;
+}
+
+h1 {
+    font-size: 28px;
+    font-family: var(--font-400);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+li {
+    list-style-type: square;
+}
+
+h2 {
+    font-size: 24px;
+    font-family: var(--font-300);
+    margin: 0;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    background-color: #fff;
+    border-bottom: 2px solid #272F3A;
+}
+
+    input:hover {
+        padding: 10px;
+        border: none;
+        background-color: #fff;
+        border-bottom: 2px solid #272F3A;
+    }
+
+::placeholder {
+    font-family: var(--font-200);
+    color: #C6CCD6;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #C6CCD6;
+    font-family: var(--font-200);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    font-family: var(--font-200);
+    color: #C6CCD6;
+}
+
+.configurator-container {
+    background-color: #F3F5F8;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 80px;
+}
+
+.left-container {
+    width: 55%;
+    padding-right: 24px;
+}
+
+    .left-container img {
+        width: 100%;
+        margin: auto;
+    }
+
+.configurator-image-container {
+    background-color: #272F3A;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.product-information {
+    padding: 24px;
+    color: #fff;
+}
+
+.right-container {
+    width: 45%;
+    padding-left: 24px;
+}
+
+.options {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+    .options div {
+        margin-right: 10px;
+    }
+
+label {
+    font-family: var(--font-300);
+    margin: 0;
+}
+
+.label-bold {
+    font-size: 20px;
+    font-family: var(--font-500);
+    text-transform: uppercase;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.button {
+    padding: 16px 18px;
+    font-family: var(--font-800);
+    font-size: 13px;
+    display: inline-block;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+}
+
+    .button:hover {
+        text-decoration: none;
+    }
+
+.button-green {
+    background-color: #8F2829;
+    color: #F3F5F8 !important;
+}
+
+.button-grey {
+    background-color: #272F3A;
+    color: #F3F5F8 !important;
+}
+
+#step-1,
+#step-2 {
+    display: grid;
+    flex-flow: column nowrap;
+    gap: 16px;
+}
+
+.quotation-buttons {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+    .quotation-buttons .button {
+        margin-right: 12px;
+    }
+
+.error-message {
+    color: red;
+    margin-bottom: 6px;
+}
+
+.thanks-container {
+    margin: auto;
+    margin-top: 80px;
+    text-align: center;
+    display: grid;
+    gap: 12px;
+}
+
+    .thanks-container .button {
+        width: min-content;
+        margin: auto;
+    }
+
+@media screen and (max-width: 1219px) {
+    .configurator-container {
+        flex-flow: column nowrap;
+    }
+
+    .left-container {
+        width: 100%;
+        padding: 60px 0 0 0;
+        order: 2;
+    }
+
+    .right-container {
+        width: 100%;
+        padding: 0;
+        order: 1;
+    }
+}

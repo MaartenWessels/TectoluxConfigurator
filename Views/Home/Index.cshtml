@@ -1,0 +1,158 @@
+﻿@model ConfiguratorViewModel
+@{
+    ViewData["Title"] = "Configurator";
+}
+
+<div class="configurator-container">
+    <div class="left-container">
+        <div class="configurator-image-container">
+            <img id="img" src="~/images/@Model.ImageUrl" />
+            <div class="product-information">
+                <h2>
+                    Geschatte prijs per product incl. BTW:<br /> <span id="price">@Model.ItemPrice</span>
+                </h2>
+                <ul>
+                    <li id="lengthLi">
+                        Lengte: @(Model.Length)mm
+                    </li>
+                    <li id="widthLi">
+                        Breedte: @(Model.Width)mm
+                    </li>
+                    <li id="glassLi">
+                        Glas: @Model.GlassOptions.Where(x => x.Id == Model.SelectedGlassOptionId).FirstOrDefault().Description
+                    </li>
+                    <li id="blindsLi">
+                        Zonwering: @Model.BlindsOptions.Where(x => x.Id == Model.SelectedBlindsOptionId).FirstOrDefault().Description
+                    </li>
+                    <li id="amountLi">
+                        Aantal: @Model.Amount
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="right-container">
+        <h1>Maatwerk</h1>
+        <form id="form" name="form" method="post" asp-controller="Home" asp-action="Configurator">
+            <div id="step-1">
+                <div>
+                    <label asp-for="Length">Lengte in millimeters</label><br />
+                    <input type="number" asp-for="Length" />
+                </div>
+                <div>
+                    <label asp-for="Width">Breedte in millimeters</label><br />
+                    <input asp-for="Width" type="number" />
+                </div>
+                <div>
+                    <label class="label-bold">Glas</label><br />
+                    <div class="options">
+                        @foreach (var option in Model.GlassOptions.OrderBy(x => x.SortOrder))
+                        {
+                            @if (!option.IsArchived)
+                            {
+                                <div>
+                                    <input id="glass-@option.Id" type="radio" value="@option.Id" asp-for="SelectedGlassOptionId" />
+                                    <label for="glass-@option.Id">@option.Description</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div>
+                    <label class="label-bold">Zonwering</label><br />
+                    <div class="options">
+                        @foreach (var option in Model.BlindsOptions.OrderBy(x => x.SortOrder))
+                        {
+                            @if (!option.IsArchived)
+                            {
+                                <div>
+                                    <input id="blinds-@option.Id" type="radio" value="@option.Id" asp-for="SelectedBlindsOptionId" />
+                                    <label for="blinds-@option.Id">@option.Description</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div>
+                    <label asp-for="Amount">Aantal</label><br />
+                    <input type="number" min="1" asp-for="Amount" />
+                </div>
+                <h2>Geschatte Totaalprijs incl. BTW: <br /> <span id="totalprice">@Model.TotalPrice</span></h2>
+
+                @if (!Model.ValidationResult.IsValid)
+                {
+                    <div>
+                        @foreach (var error in Model.ValidationResult.Errors)
+                        {
+                            <p class="error-message">@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <div>
+                    <a class="button button-grey" onclick="toggleStep()">Volgende</a>
+                </div>
+            </div>
+            <div class="display-none" id="step-2">
+                <div>
+                    <label asp-for="FullName">Naam</label><br />
+                    <input type="text" asp-for="FullName" placeholder="Uw volledige naam" />
+                </div>
+                <div>
+                    <label asp-for="EmailAddress">E-mailadres</label><br />
+                    <input type="email" asp-for="EmailAddress" placeholder="john@example.com" />
+                </div>
+                <div>
+                    <label asp-for="PhoneNumber">Telefoonnummer (optioneel)</label><br />
+                    <input type="tel" asp-for="PhoneNumber" placeholder="0612345678" />
+                </div>
+                <h2>Geschatte Totaalprijs incl. BTW: <br /> <span id="totalprice">@Model.TotalPrice</span></h2>
+
+                @if (!Model.ValidationResult.IsValid)
+                {
+                    <div>
+                        @foreach (var error in Model.ValidationResult.Errors)
+                        {
+                            <p class="error-message">@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <div class="quotation-buttons">
+                    <a class="button button-grey" onclick="toggleStep()">Vorige</a>
+                    <button class="button button-green" type="submit">Offerte aanvragen</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var form = document.getElementById('form');
+    form.addEventListener('change', function () {
+        var formData = new FormData(form);
+        axios({
+            method: 'post',
+            url: '/Home/GetRoofLight',
+            data: formData
+        }).then(function (response) {
+            document.getElementById('totalprice').innerHTML = response.data.totalPrice;
+            document.getElementById('glassLi').innerHTML = 'Glas: ' + response.data.selectedGlassOption.description;
+            document.getElementById('blindsLi').innerHTML = 'Zonwering: ' + response.data.selectedBlindsOption.description;
+            document.getElementById('lengthLi').innerHTML = 'Lengte: ' + response.data.length + 'mm';
+            document.getElementById('widthLi').innerHTML = 'Breedte: ' + response.data.width + 'mm';
+            document.getElementById('amountLi').innerHTML = 'Aantal: ' + response.data.amount;
+            var price = document.getElementById('price')
+            price.innerHTML = response.data.itemPrice;
+            var imageUrl = document.getElementById('img');
+            imageUrl.src = '/images/' + response.data.imageUrl;
+        });
+    });
+    var step1 = document.getElementById('step-1');
+    var step2 = document.getElementById('step-2');
+    function toggleStep() {
+        step1.classList.toggle('display-none');
+        step2.classList.toggle('display-none');
+    }
+
+</script>

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TectoluxConfigurator</title>
+    <link rel="stylesheet" href="~/lib/lato/latolatinfonts.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/shopify.css" />
+</head>
+<body>
+    <header>
+        <img src="~/images/emergo_logo.svg"/>
+        <nav class="">
+        </nav>
+    </header>
+    <div class="">
+        <main role="main" class="">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="">
+    </footer>
+    <script src="https://sdks.shopifycdn.com/buy-button/1.0.0/buybutton.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
