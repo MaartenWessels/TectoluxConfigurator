@@ -13,12 +13,12 @@ using TectoluxConfigurator.Validators;
 
 namespace TectoluxConfigurator.Controllers
 {
-    public class HomeController : Controller
+    public class ConfiguratorController : Controller
     {
         private readonly TectoluxDbContext _context;
         private readonly IConfiguration _config;
 
-        public HomeController(TectoluxDbContext context, IConfiguration config)
+        public ConfiguratorController(TectoluxDbContext context, IConfiguration config)
         {
             _context = context;
             _config = config;
@@ -36,7 +36,7 @@ namespace TectoluxConfigurator.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ConfiguratorViewModel>> Configurator(ConfiguratorViewModel formResult)
+        public async Task<ActionResult<ConfiguratorViewModel>> Configurate(ConfiguratorViewModel formResult)
         {
             var glassOption = await _context.GlassOptions.SingleOrDefaultAsync(x => x.Id == formResult.SelectedGlassOptionId);
             var blindsOption = await _context.BlindsOptions.SingleOrDefaultAsync(x => x.Id == formResult.SelectedBlindsOptionId);
@@ -56,36 +56,36 @@ namespace TectoluxConfigurator.Controllers
                 return View("Index", formResult);
             }
 
-            var mailModel = new ConfiguratorMailModel
-            {
-                BlindsOption = blindsOption,
-                GlassOption = glassOption,
-                ItemPrice = formResult.ItemPrice,
-                TotalPrice = formResult.TotalPrice,
-                Length = formResult.Length,
-                Width = formResult.Width,
-                Amount = formResult.Amount,
-                FullName = formResult.FullName,
-                EmailAddress = formResult.EmailAddress,
-                PhoneNumber = formResult.PhoneNumber
-            };
-            var toSalesMessage = new TemplatedPostmarkMessage
-            {
-                From = _config.GetValue<string>("Postmark:FromEmailAddress"),
-                To = _config.GetValue<string>("Postmark:SalesEmailAddress"),
-                TemplateId = _config.GetValue<int>("Postmark:SalesTemplateKey"),
-                TemplateModel = mailModel,
-            };
-            var toCustomermessage = new TemplatedPostmarkMessage
-            {
-                From = _config.GetValue<string>("Postmark:FromEmailAddress"),
-                To = mailModel.EmailAddress,
-                TemplateId = _config.GetValue<int>("Postmark:CustomerTemplateKey"),
-                TemplateModel = mailModel,
-            };
-            var client = new PostmarkClient(_config.GetValue<string>("Postmark:PostmarkApiKey"));
-            await client.SendMessageAsync(toSalesMessage);
-            await client.SendMessageAsync(toCustomermessage);
+            //var mailModel = new ConfiguratorMailModel
+            //{
+            //    BlindsOption = blindsOption,
+            //    GlassOption = glassOption,
+            //    ItemPrice = formResult.ItemPrice,
+            //    TotalPrice = formResult.TotalPrice,
+            //    Length = formResult.Length,
+            //    Width = formResult.Width,
+            //    Amount = formResult.Amount,
+            //    FullName = formResult.FullName,
+            //    EmailAddress = formResult.EmailAddress,
+            //    PhoneNumber = formResult.PhoneNumber
+            //};
+            //var toSalesMessage = new TemplatedPostmarkMessage
+            //{
+            //    From = _config.GetValue<string>("Postmark:FromEmailAddress"),
+            //    To = _config.GetValue<string>("Postmark:SalesEmailAddress"),
+            //    TemplateId = _config.GetValue<int>("Postmark:SalesTemplateKey"),
+            //    TemplateModel = mailModel,
+            //};
+            //var toCustomermessage = new TemplatedPostmarkMessage
+            //{
+            //    From = _config.GetValue<string>("Postmark:FromEmailAddress"),
+            //    To = mailModel.EmailAddress,
+            //    TemplateId = _config.GetValue<int>("Postmark:CustomerTemplateKey"),
+            //    TemplateModel = mailModel,
+            //};
+            //var client = new PostmarkClient(_config.GetValue<string>("Postmark:PostmarkApiKey"));
+            //await client.SendMessageAsync(toSalesMessage);
+            //await client.SendMessageAsync(toCustomermessage);
 
             return RedirectToAction("Thanks");
         }

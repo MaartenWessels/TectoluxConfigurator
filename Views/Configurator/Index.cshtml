@@ -33,7 +33,7 @@
     </div>
     <div class="right-container">
         <h1>Maatwerk</h1>
-        <form id="form" name="form" method="post" asp-controller="Home" asp-action="Configurator">
+        <form id="form" name="form" method="post" asp-controller="Configurator" asp-action="Configurate">
             <div id="step-1">
                 <div>
                     <label asp-for="Length">Lengte in millimeters</label><br />
@@ -127,32 +127,4 @@
     </div>
 </div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-    var form = document.getElementById('form');
-    form.addEventListener('change', function () {
-        var formData = new FormData(form);
-        axios({
-            method: 'post',
-            url: '/Home/GetRoofLight',
-            data: formData
-        }).then(function (response) {
-            document.getElementById('totalprice').innerHTML = response.data.totalPrice;
-            document.getElementById('glassLi').innerHTML = 'Glas: ' + response.data.selectedGlassOption.description;
-            document.getElementById('blindsLi').innerHTML = 'Zonwering: ' + response.data.selectedBlindsOption.description;
-            document.getElementById('lengthLi').innerHTML = 'Lengte: ' + response.data.length + 'mm';
-            document.getElementById('widthLi').innerHTML = 'Breedte: ' + response.data.width + 'mm';
-            document.getElementById('amountLi').innerHTML = 'Aantal: ' + response.data.amount;
-            var price = document.getElementById('price')
-            price.innerHTML = response.data.itemPrice;
-            var imageUrl = document.getElementById('img');
-            imageUrl.src = '/images/' + response.data.imageUrl;
-        });
-    });
-    var step1 = document.getElementById('step-1');
-    var step2 = document.getElementById('step-2');
-    function toggleStep() {
-        step1.classList.toggle('display-none');
-        step2.classList.toggle('display-none');
-    }
-
-</script>
+<script src="~/js/configurator.js"></script>
